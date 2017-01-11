@@ -1,0 +1,125 @@
+name: ZenPacks.acme.Widgeter
+
+device_classes:
+  /Server/ACME/Widgeter:
+    zProperties:
+      zDeviceTemplates:
+        - WidgeterHealth
+
+    templates:
+      WidgeterHealth:
+        description: ACME Widgeter monitoring.
+
+        datasources:
+          load1:
+            type: COMMAND
+            parser: Nagios
+            commandTemplate: "get_load.sh 1"
+
+            datapoints:
+              load:
+                rrdtype: GAUGE
+                rrdmin: 0
+                rrdmax: 100
+
+          load5:
+            type: COMMAND
+            parser: Nagios
+            commandTemplate: "get_load.sh 5"
+
+            datapoints:
+              load:
+                rrdtype: GAUGE
+                rrdmin: 0
+                rrdmax: 100
+
+          load15:
+            type: COMMAND
+            parser: Nagios
+            commandTemplate: "get_load.sh 15"
+
+            datapoints:
+              load:
+                rrdtype: GAUGE
+                rrdmin: 0
+                rrdmax: 100
+
+          random:
+            type: COMMAND
+            parser: Nagios
+            commandTemplate: gen_random.py
+
+            datapoints:
+              random:
+                rrdtype: GAUGE
+                rrdmin: 0
+                rrdmax: 100
+
+        thresholds:
+          unhealthy:
+            dsnames: [load1_load]
+            eventClass: /Status
+            severity: Warning
+            minval: 0
+
+        thresholds:
+          unhealthy:
+            dsnames: [load5_load]
+            eventClass: /Status
+            severity: Warning
+            minval: 0
+
+        thresholds:
+          unhealthy:
+            dsnames: [load15_load]
+            eventClass: /Status
+            severity: Warning
+            minval: 0
+
+        thresholds:
+          unhealthy:
+            dsnames: [random_random]
+            eventClass: /Status
+            severity: Warning
+            minval: 0
+
+        graphs:
+          load1:
+            units: percent
+            miny: 0
+            maxy: 0
+
+            graphpoints:
+              load1:
+                dpName: load1_load
+                format: "%7.2lf%%"
+          load5:
+            units: percent
+            miny: 0
+            maxy: 0
+
+            graphpoints:
+              load5:
+                dpName: load5_load
+                format: "%7.2lf%%"
+
+          load15:
+            units: percent
+            miny: 0
+            maxy: 0
+
+            graphpoints:
+              load15:
+                dpName: load15_load
+                format: "%7.2lf%%"
+
+          random:
+            units: percent
+            miny: 0
+            maxy: 100
+
+            graphpoints:
+              random:
+                dpName: random_random
+                format: "%7.2lf%%"
+
